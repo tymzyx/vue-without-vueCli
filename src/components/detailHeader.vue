@@ -12,6 +12,7 @@
 <style lang="css" scoped>
     div {
         margin: 15px;
-        text-align: center;
+        text-align: left;
+        margin-left: 8px;
     }
 </style>

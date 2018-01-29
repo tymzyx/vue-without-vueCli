@@ -11,7 +11,9 @@
 
 <style scoped>
     div {
+        width: 100%;
         font-size: 10px;
         text-align: center;
+        min-width: 1000px;
     }
 </style>

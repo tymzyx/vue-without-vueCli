@@ -1,16 +1,21 @@
 <template>
     <li class="member-list">
-        <router-link to="/detail" class="member-list-link">
-            <div class="member-list-pic">
-                <img alt="" :src="memberImg">
-            </div>
-        </router-link>
+        <div class="member-list-pic" :data-id="dataId">
+            <router-link to="/detail" class="member-list-link">
+                <img alt="" :src="memberImg" :data-id="dataId" @click="clicked">
+            </router-link>
+        </div>
     </li>
 </template>
 
 <script>
     export default {
-        props: ["memberImg"]
+        props: ["memberImg", "dataId"],
+        methods: {
+            clicked: function (ev) {
+                this.$emit("click", ev.target.getAttribute('data-id'));
+            }
+        }
     }
 </script>
 
