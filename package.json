@@ -1,14 +1,14 @@
 {
   "name": "webpack-vue",
   "version": "1.0.0",
-  "description": "",
+  "description": "create a vue project without vue-cli",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
   "keywords": [],
-  "author": "",
+  "author": "sl",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -22,5 +22,13 @@
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tymzyx/vue-without-vueCli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tymzyx/vue-without-vueCli/issues"
+  },
+  "homepage": "https://github.com/tymzyx/vue-without-vueCli#readme"
 }

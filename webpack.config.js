@@ -35,6 +35,8 @@ module.exports = {
         ]
     },
     resolve: {
+        // 省略文件名后缀
+        extensions: ['.js', '.vue'],
         alias: {
             // https://www.imooc.com/article/17868
             'vue': 'vue/dist/vue.js'
