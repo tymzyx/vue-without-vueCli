@@ -8,6 +8,7 @@
             </ul>
             <p v-for="item in experience">{{ item }}</p>
             <img :src="teamImg" alt="">
+            <button @click="show">show the table</button>
         </div>
     </div>
 </template>
@@ -23,6 +24,11 @@
                 var split1 = split0[1].split(';');
                 ret = ret.concat(split1);
                 return ret;
+            }
+        },
+        methods: {
+            show: function () {
+                this.$emit('triggerShow');
             }
         }
     }
@@ -63,5 +69,11 @@
     .info-content p {
         text-align: left;
         margin-left: 40px;
+    }
+    .info-content button {
+        position: relative;
+        bottom: 75px;
+        left: 60px;
+        cursor: pointer;
     }
 </style>

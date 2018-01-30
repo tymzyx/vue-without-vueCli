@@ -1,7 +1,8 @@
 <template>
     <div class="detail-container">
         <detail-header></detail-header>
-        <detail-body :headInfo="infos.headInfo" :memberImg="infos.srcImg" :lists = "infos.lists" :experienceDes = "infos.experiences" :teamImg="infos.srcTeamImg"></detail-body>
+        <detail-body :headInfo="infos.headInfo" :memberImg="infos.srcImg" :lists = "infos.lists" :experienceDes = "infos.experiences" :teamImg="infos.srcTeamImg" @triggerShow="triggerTable"></detail-body>
+        <detail-table :display="show" @triggerClose="triggerTable"></detail-table>
         <detail-footer></detail-footer>
     </div>
 </template>
@@ -10,6 +11,7 @@
     import detailHeader from '../components/detailHeader'
     import detailBody from '../components/detailBody'
     import detailFooter from '../components/detailFooter'
+    import detailTable from '../components/detailTable'
 
     import busExp from '../bus/bus'
 
@@ -17,12 +19,18 @@
         data: function() {
             return {
                 infos: {},
-                items: []
+                items: [],
+                show: false
             }
         },
         props: ["detailId"],
         components: {
-            detailHeader, detailBody, detailFooter
+            detailHeader, detailBody, detailFooter, detailTable
+        },
+        methods: {
+            triggerTable: function () {
+                this.show = !this.show;
+            }
         },
         created: function () {
             this.items = [
