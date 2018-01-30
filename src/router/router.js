@@ -15,8 +15,11 @@ const routes = [
         }
     },
     {
-        path: '/detail',
+        mode: 'history',
+        path: '/detail/:detailId',
         component: detail,
+        name: 'detail',
+        props: true
     }
 ];
 

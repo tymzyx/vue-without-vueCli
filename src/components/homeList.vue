@@ -1,7 +1,7 @@
 <template>
     <li class="member-list">
         <div class="member-list-pic" :data-id="dataId">
-            <router-link to="/detail" class="member-list-link">
+            <router-link :to="{name: 'detail', params: {detailId: dataId}}" class="member-list-link">
                 <img alt="" :src="memberImg" :data-id="dataId" @click="clicked">
             </router-link>
         </div>
