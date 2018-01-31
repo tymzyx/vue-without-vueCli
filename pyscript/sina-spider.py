@@ -58,7 +58,7 @@ def get_userInfo(id):
 # 获取微博内容信息,并保存到文本中，内容包括：每条微博的内容、微博详情页面地址、点赞数、评论数、转发数等
 def get_weibo(id):
     i = 1
-    while i < 3:
+    while i < 2:
         url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=' + id
         weibo_url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=' + id + '&containerid=' + get_containerid(url) + '&page=' + str(i)
         try:

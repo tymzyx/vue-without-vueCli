@@ -15,6 +15,12 @@
 
     import busExp from '../bus/bus'
 
+    var detailWs = new WebSocket("ws://localhost:9999/detail");
+    detailWs.onopen = function () {
+        console.log('detailWs connected');
+        detailWs.send('first message');
+    };
+
     export default {
         data: function() {
             return {
