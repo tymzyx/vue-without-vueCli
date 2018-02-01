@@ -28,8 +28,14 @@ module.exports = {
             },
             //用babel解析js文件 排除模块安装目录的文件
             {
+                // .babelrc 解决vue-loader解析es6中...失败问题
                 test: /\.js$/,
-                use: 'babel-loader',
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['es2015', 'stage-2']
+                    }
+                }],
                 exclude: /node_modules/
             }
         ]
@@ -41,5 +47,5 @@ module.exports = {
             // https://www.imooc.com/article/17868
             'vue': 'vue/dist/vue.js'
         }
-    }
+    },
 };
