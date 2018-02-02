@@ -1,8 +1,8 @@
 <template>
     <div>
         <h3>成员资料：</h3>
-        <button @click="$store.commit('add')">{{ count }}</button>
-        <button @click="myCount">{{ count }}</button>
+        <button v-if="false" @click="$store.commit('add')">{{ count }}</button>
+        <button v-if="false" @click="myCount">{{ count }}</button>
     </div>
 </template>
 

@@ -18,12 +18,14 @@
         props:["headInfo", "memberImg", "lists", "experienceDes", "teamImg"],
         computed: {
             experience: function () {
-                var ret = [];
-                var split0 = this.experienceDes.split(':');
-                ret.push(split0[0] + ':');
-                var split1 = split0[1].split(';');
-                ret = ret.concat(split1);
-                return ret;
+                if (this.experienceDes) {
+                    var ret = [];
+                    var split0 = this.experienceDes.split(':');
+                    ret.push(split0[0] + ':');
+                    var split1 = split0[1].split(';');
+                    ret = ret.concat(split1);
+                    return ret;
+                }
             }
         },
         methods: {

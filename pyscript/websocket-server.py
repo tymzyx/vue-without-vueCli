@@ -13,8 +13,14 @@ tornado.options.parse_command_line()
 
 class DetailHandler(tornado.websocket.WebSocketHandler):
 
-    def __int__(self):
-        self.data = []
+    def __init__(self, application, request, **kwargs):
+        super(DetailHandler, self).__init__(application, request, **kwargs)
+        self.detailData = {}
+        teams = ['B', 'E', 'J']
+        for team in teams:
+            with open('detail-json/' + team + '.json', 'r') as f:
+                res = json.load(f)
+                self.detailData[team] = res
 
     def data_received(self, chunk):
         print u'data_received'
@@ -25,16 +31,16 @@ class DetailHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         print 'WebSocket connection build'
+        res = self.detailData['J']
+        self.write_message({'info': res})
 
     def on_message(self, message):
         print 'message: ', message
         message_parse = message.split('|')
         query_type = message_parse[0]
         if query_type == '0':
-            with open('detail-json/J.json', 'r') as f:
-                res = json.load(f)
+            res = self.data['J']
             self.write_message(res)
-
 
     def on_close(self):
         print 'WebSocket disconnected'
