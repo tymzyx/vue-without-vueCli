@@ -2,7 +2,13 @@
     <transition name="fade">
         <div v-show="display" class="table-container">
             <a class="table-close" @click="closeTable">&#10005</a>
-            <div class="table-content" ref="tableDom"></div>
+            <div class="table-content" ref="tableDom0"></div>
+            <div class="table-content" ref="tableDom1"></div>
+            <div class="table-content" ref="tableDom2"></div>
+            <div class="info-content">
+                <p>最热微博：<button>123</button></p>
+                <p>最水微博：</p>
+            </div>
         </div>
     </transition>
 </template>
@@ -18,7 +24,9 @@
             }
         },
         mounted: function() {
-            var chart = echarts.init(this.$refs.tableDom);
+            var chart0 = echarts.init(this.$refs.tableDom0);
+            var chart1 = echarts.init(this.$refs.tableDom1);
+            var chart2 = echarts.init(this.$refs.tableDom2);
             var option = {
                 xAxis: {
                     type: 'category',
@@ -32,7 +40,9 @@
                     type: 'line'
                 }]
             };
-            chart.setOption(option);
+            chart0.setOption(option);
+            chart1.setOption(option);
+            chart2.setOption(option);
         }
     }
 </script>
@@ -40,10 +50,11 @@
 <style lang="css" scoped>
     .table-container {
         position: absolute;
-        top: 20%;
-        left: 34%;
-        width: 400px;
-        height: 400px;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        width: 1000px;
+        height: 600px;
         border-radius: 15px;
         box-shadow: 0px 0px 5px black;
         background-color: white;
@@ -56,11 +67,17 @@
         top: 4px;
         cursor: pointer;
     }
-    .table-content {
-        margin: 26px auto auto auto;
-        width: 360px;
-        height: 360px;
+    .table-content, .info-content {
+        margin: 10px 40px 0 40px;
+        width: 420px;
+        height: 280px;
         background-color: white;
+        float: left;
+    }
+    .info-content p {
+        font-family: "Microsoft YaHei";
+        margin: 30px 0 0 5px;
+        text-align: left;
     }
     .fade-enter-active, .fade-leave-active {
       transition: opacity .5s;

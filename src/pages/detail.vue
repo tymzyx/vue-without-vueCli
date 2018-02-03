@@ -1,7 +1,7 @@
 <template>
     <div class="detail-container">
         <detail-header></detail-header>
-        <detail-body :headInfo="infos.headInfo" :memberImg="infos.srcImg" :lists = "infos.lists" :experienceDes = "infos.experiences" :teamImg="infos.srcTeamImg" @triggerShow="triggerTable"></detail-body>
+        <detail-body :headInfo="infos.headInfo" :memberImg="infos.srcImg" :lists = "infos.lists" :experienceDes = "infos.experiences" :teamImg="srcTeamImg" @triggerShow="triggerTable"></detail-body>
         <detail-table :display="show" @triggerClose="triggerTable"></detail-table>
         <detail-footer></detail-footer>
     </div>
@@ -19,11 +19,15 @@
     import busExp from '../bus/bus'
     import wsExp from '../ws/ws'
 
+    let imgUrlJ = require('../assets/img/teamJ.png');
+    let imgUrls = {'J': imgUrlJ};
+
     export default {
         data: function() {
             return {
                 oldInfos: {},
                 oldItems: [],
+                srcTeamImg: '',
                 show: false
             }
         },
@@ -38,6 +42,7 @@
                 if (this.$store.state.detailData.length) {
                     let nowId = this.detailId;
                     let ret = this.$store.state.detailData.filter(function(ele) {return ele.key == nowId;})[0];
+                    this.srcTeamImg = imgUrls[ret.srcTeamImg];
                     console.log('detailData:', this.detailId, this.$store.state.detailData, ret);
                     return ret;
                 } else {
@@ -72,6 +77,8 @@
             console.log('$route', this.$route.params, this.detailId);
             // this.infos = this.items[busExp.detailId];
             // this.infos = this.items[this.detailId];
+
+            setTimeout(() => wsExp.ws.send('1|' + this.detailId), 1000);
         },
         updated() {
             console.log('items:', this.items);

@@ -5,10 +5,14 @@ Created on 2018-01-30 @author: Sl
 功能: 爬取新浪微博用户的信息及微博评论，点赞，转发
 """
 
-# -*- coding: utf-8 -*-
-
 import urllib2
 import json
+
+import sys
+default_encoding = 'utf-8'
+if sys.getdefaultencoding() != default_encoding:
+    reload(sys)
+    sys.setdefaultencoding(default_encoding)
 
 # 定义要爬取的微博大V的微博ID
 id = '6013611098'
@@ -58,18 +62,18 @@ def get_userInfo(id):
 # 获取微博内容信息,并保存到文本中，内容包括：每条微博的内容、微博详情页面地址、点赞数、评论数、转发数等
 def get_weibo(id):
     i = 1
-    while i < 2:
+    while i < 3:
         url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=' + id
         weibo_url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=' + id + '&containerid=' + get_containerid(url) + '&page=' + str(i)
         try:
             data = use_proxy(weibo_url, proxy_addr)
             content = json.loads(data).get('data')
             cards = content.get('cards')
-            if (len(cards) > 0):
+            if len(cards) > 0:
                 for j in range(len(cards)):
                     print("-----正在爬取第" + str(i) + "页，第" + str(j) + "条微博------")
                     card_type = cards[j].get('card_type')
-                    if (card_type == 9):
+                    if card_type == 9:
                         mblog = cards[j].get('mblog')
                         attitudes_count = mblog.get('attitudes_count')
                         comments_count = mblog.get('comments_count')
@@ -79,12 +83,13 @@ def get_weibo(id):
                         text = mblog.get('text')
                         print "----第", str(i), "页，第", str(j), "条微博----" + "\n"
                         print "微博地址：", str(scheme), "\n", "发布时间：", str(created_at) + "\n", "微博内容：", text, "\n", "点赞数：", str(attitudes_count), "\n", "评论数：", str(comments_count), "\n", "转发数：", str(reposts_count), "\n"
-                i += 1
             else:
                 break
         except Exception as e:
             print(e)
             pass
+        finally:
+            i += 1
 
 
 if __name__ == "__main__":

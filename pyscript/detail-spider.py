@@ -57,7 +57,7 @@ def get_member_info():
                              '加入时间: ' + info['join_day'], '最终所属: BEJ48 ' + info['tname'],
                              '加入所属: ' + info['pname'], '所属公司: ' + info['company']]
         save_info['experiences'] = '经历备注:' + ';'.join(info['experience'].split('<br>'))
-        save_info['srcTeamImg'] = ''
+        save_info['srcTeamImg'] = info['tname']
         key += 1
         all_info[info['tname']].append(save_info)
         print 'save ' + info['pinyin'] + ' info completed ' + str(key)
