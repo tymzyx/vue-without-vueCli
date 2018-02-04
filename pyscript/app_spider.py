@@ -67,7 +67,7 @@ def get_weibo(id):
             cards = content.get('cards')
             if len(cards) > 0:
                 for j in range(len(cards)):
-                    print("-----正在爬取第" + str(i) + "页，第" + str(j) + "条微博------")
+                    # print("-----正在爬取第" + str(i) + "页，第" + str(j) + "条微博------")
                     card_type = cards[j].get('card_type')
                     if card_type == 9:
                         mblog = cards[j].get('mblog')
@@ -77,6 +77,7 @@ def get_weibo(id):
                         else:
                             split_res = created_at.split('-')
                             now_month = split_res[0] if int(split_res[0]) <= 12 else split_res[1]
+                            now_month = str(int(now_month))
                             if now_month == init_month:
                                 continue
                         if now_month != month:

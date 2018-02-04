@@ -2,7 +2,7 @@
     <div class="detail-container">
         <detail-header></detail-header>
         <detail-body :headInfo="infos.headInfo" :memberImg="infos.srcImg" :lists = "infos.lists" :experienceDes = "infos.experiences" :teamImg="srcTeamImg" @triggerShow="triggerTable"></detail-body>
-        <detail-table :display="show" @triggerClose="triggerTable"></detail-table>
+        <detail-table :display="show" :charts-data="chartsData" @triggerClose="triggerTable"></detail-table>
         <detail-footer></detail-footer>
     </div>
 </template>
@@ -48,6 +48,9 @@
                 } else {
                     return {};
                 }
+            },
+            chartsData() {
+                return this.$store.state.chartsData;
             }
         },
         methods: {

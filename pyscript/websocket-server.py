@@ -21,6 +21,7 @@ class DetailHandler(tornado.websocket.WebSocketHandler):
         super(DetailHandler, self).__init__(application, request, **kwargs)
         self.detail_data = {}
         self.weibo_ids = {}
+        self.weibo_infos = {}
         teams = ['B', 'E', 'J']
         for team in teams:
             with open('detail-json/' + team + '.json', 'r') as f:
@@ -52,11 +53,16 @@ class DetailHandler(tornado.websocket.WebSocketHandler):
         elif query_type == '1':
             # there get the weibo data by spider
             member_index = message_parse[1]
+            if member_index in self.weibo_infos:
+                self.write_message(self.weibo_infos[member_index])
             if member_index in self.weibo_ids:
                 weibo_id = self.weibo_ids[member_index]
                 base_info = get_userInfo(weibo_id)
                 weibo_info = get_weibo(weibo_id)
-                self.write_message({'baseInfo': base_info, 'weiboInfo': weibo_info, 'type': 'weibo'})
+                self.weibo_infos[member_index] = {
+                    'baseInfo': base_info, 'weiboInfo': weibo_info, 'type': 'weibo', 'memberIndex': member_index
+                }
+                self.write_message(self.weibo_infos[member_index])
             else:
                 self.write_message({'type': 'not found data'})
 
