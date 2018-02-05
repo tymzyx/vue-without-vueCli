@@ -55,8 +55,9 @@ def get_weibo(id):
     i = 1
     url = 'https://m.weibo.cn/api/container/getIndex?type=uid&value=' + id
     containerid = get_containerid(url)
-    init_month = datetime.datetime.now().month
+    init_month = str(datetime.datetime.now().month)
     month = init_month
+    print 'init_month ', init_month
     ret = {}
     break_index = 0
     while True:

@@ -41,4 +41,32 @@ chartExp.getTrendOption = function (data) {
     return option;
 };
 
+chartExp.getRadarOption = function (data) {
+
+    let option = {
+        radar: [
+            {
+                indicator: [
+                    {text: '努力度', max: 1},
+                    {text: '人气度', max: 1},
+                    {text: '自恋度', max: 1},
+                    {text: '喜爱度', max: 1},
+                    {text: '潜力度', max: 1},
+                ]
+            }
+        ],
+        series: [{
+            type: 'radar',
+            data: [
+                {
+                    value: data.chartData
+                }
+            ]
+        }]
+    };
+
+    return option;
+
+};
+
 export default chartExp;

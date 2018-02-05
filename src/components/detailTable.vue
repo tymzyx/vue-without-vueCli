@@ -3,9 +3,9 @@
         <div v-show="display" class="table-container">
             <a class="table-close" @click="closeTable">&#10005</a>
             <div v-if="btnDisplay" @click.capture="changeTrend">
-                <button class="btn0" autofocus="focus" data-type="comments">评论</button>
-                <button class="btn1" data-type="reposts">转发</button>
-                <button class="btn2" data-type="attitudes">点赞</button>
+                <button class="btn0" :class="{'btn-active': btnActives.comments}" data-type="comments">评论</button>
+                <button class="btn1" :class="{'btn-active': btnActives.reposts}" data-type="reposts">转发</button>
+                <button class="btn2" :class="{'btn-active': btnActives.attitudes}" data-type="attitudes">点赞</button>
             </div>
             <div class="table-content" ref="tableDom0"></div>
             <div class="table-content" ref="tableDom1"></div>
@@ -30,6 +30,11 @@
                 focus: true,
                 btnDisplay: false,
                 charts: {},
+                btnActives: {
+                    comments: true,
+                    reposts: false,
+                    attitudes: false
+                }
             };
         },
         props:["display", "chartsData"],
@@ -39,8 +44,11 @@
             },
             changeTrend: function(ev) {
                 let type = ev.target.getAttribute("data-type");
-                console.log('ev target: ', ev, type, this.chartsData);
                 if (type) {
+                    for (let key in this.btnActives) {
+                        this.btnActives[key] = false;
+                    }
+                    this.btnActives[type] = true;
                     let trendData = {
                         chartData: this.chartsData.trends[type], xData: this.chartsData.trends.creates
                     };
@@ -58,10 +66,15 @@
                 let trendData = {
                     chartData: val.trends.comments, xData: val.trends.creates
                 };
-                let option = chartExp.getTrendOption(trendData);
+                let trendOption = chartExp.getTrendOption(trendData);
                 this.charts.trend.hideLoading();
                 this.btnDisplay = true;
-                this.charts.trend.setOption(option);
+                this.charts.trend.setOption(trendOption);
+
+                let radarData = {chartData: val.radar};
+                let radarOption = chartExp.getRadarOption(radarData);
+                this.charts.radar.hideLoading();
+                this.charts.radar.setOption(radarOption);
             }
         },
         mounted: function() {
@@ -70,7 +83,9 @@
             let chart1 = echarts.init(this.$refs.tableDom1);
             let chart2 = echarts.init(this.$refs.tableDom2);
             this.charts['trend'] = chart0;
+            this.charts['radar'] = chart2;
             chart0.showLoading();
+            chart2.showLoading();
             let option = {
                 xAxis: {
                     type: 'category',
@@ -85,7 +100,6 @@
                 }]
             };
             chart1.setOption(option);
-            chart2.setOption(option);
         }
     }
 </script>
@@ -141,6 +155,7 @@
         top: 25px;
         font-size: 12px;
         z-index: 10;
+        outline: none;
     }
     .btn0 {
         left: 250px;
@@ -150,5 +165,8 @@
     }
     .btn2 {
         left: 380px;
+    }
+    .btn-active {
+        background: #E0FFFF;
     }
 </style>

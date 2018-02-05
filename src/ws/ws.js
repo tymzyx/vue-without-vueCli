@@ -69,7 +69,26 @@ function processWeibo(weiboInfo) {
         trends.reposts = [...trends.reposts, ...reposts[String(month)]];
         trends.creates = [...trends.creates, ...creates[String(month)]];
     }
-    return {trends: trends};
+
+    function sum(t, value) {
+        return t + value;
+    }
+
+    let avgAttitudes = trends.attitudes.reduce(sum) / trends.attitudes.length;
+    let avgComments = trends.comments.reduce(sum) / trends.attitudes.length;
+    let avgReposts = trends.reposts.reduce(sum) / trends.attitudes.length;
+    let avgPost = trends.attitudes.length / 90;
+
+    let strive = parseFloat(avgPost.toFixed(2));
+    let popular = parseFloat(((avgAttitudes/1000 + avgComments/500 + avgReposts/100) / 3).toFixed(2));
+    let narcissism = parseFloat(Math.random().toFixed(2));
+    let like = 0.95;
+    let potential = parseFloat((strive*0.8 + popular*0.2).toFixed(2));
+
+    // 努力、人气、自恋、喜爱、潜力
+    let radar = [strive, popular, narcissism, like, potential];
+
+    return {trends: trends, radar: radar};
 }
 
 function quickSort(arr, left, right) {
