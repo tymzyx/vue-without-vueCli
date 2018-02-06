@@ -1,8 +1,8 @@
 <template>
     <div class="detail-container">
         <detail-header></detail-header>
-        <detail-body :headInfo="infos.headInfo" :memberImg="infos.srcImg" :lists = "infos.lists" :experienceDes = "infos.experiences" :teamImg="infos.srcTeamImg" @triggerShow="triggerTable"></detail-body>
-        <detail-table :display="show" @triggerClose="triggerTable"></detail-table>
+        <detail-body :headInfo="infos.headInfo" :memberImg="infos.srcImg" :lists = "infos.lists" :experienceDes = "infos.experiences" :teamImg="srcTeamImg" @triggerShow="triggerTable"></detail-body>
+        <detail-table :display="show" :charts-data="chartsData" @triggerClose="triggerTable"></detail-table>
         <detail-footer></detail-footer>
     </div>
 </template>
@@ -13,25 +13,45 @@
     import detailFooter from '../components/detailFooter'
     import detailTable from '../components/detailTable'
 
-    import busExp from '../bus/bus'
+    import store from '../store/store'
+    import {mapState} from 'vuex'
 
-    var detailWs = new WebSocket("ws://localhost:9999/detail");
-    detailWs.onopen = function () {
-        console.log('detailWs connected');
-        detailWs.send('first message');
-    };
+    import busExp from '../bus/bus'
+    import wsExp from '../ws/ws'
+
+    let imgUrlJ = require('../assets/img/teamJ.png');
+    let imgUrls = {'J': imgUrlJ};
 
     export default {
         data: function() {
             return {
-                infos: {},
-                items: [],
+                oldInfos: {},
+                oldItems: [],
+                srcTeamImg: '',
                 show: false
             }
         },
         props: ["detailId"],
+        store,
         components: {
             detailHeader, detailBody, detailFooter, detailTable
+        },
+        computed: {
+            // ...mapState({items: 'detailData'})
+            infos: function () {
+                if (this.$store.state.detailData.length) {
+                    let nowId = this.detailId;
+                    let ret = this.$store.state.detailData.filter(function(ele) {return ele.key == nowId;})[0];
+                    this.srcTeamImg = imgUrls[ret.srcTeamImg];
+                    console.log('detailData:', this.detailId, this.$store.state.detailData, ret);
+                    return ret;
+                } else {
+                    return {};
+                }
+            },
+            chartsData() {
+                return this.$store.state.chartsData;
+            }
         },
         methods: {
             triggerTable: function () {
@@ -39,7 +59,7 @@
             }
         },
         created: function () {
-            this.items = [
+            this.oldItems = [
                 {
                     key: 0,
                     srcImg: 'http://www.bej48.com/images/member/zp_20044.jpg',
@@ -58,8 +78,15 @@
                 }
             ];
             console.log('$route', this.$route.params, this.detailId);
-//            this.infos = this.items[busExp.detailId];
-            this.infos = this.items[this.detailId];
+            // this.infos = this.items[busExp.detailId];
+            // this.infos = this.items[this.detailId];
+
+            setTimeout(() => wsExp.ws.send('1|' + this.detailId), 1000);
+        },
+        updated() {
+            console.log('items:', this.items);
+            // let nowId = this.detailId;
+            // this.infos = this.items.filter(function(ele) {return ele.key === nowId;})[0];
         }
     }
 </script>

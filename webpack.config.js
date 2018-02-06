@@ -20,16 +20,41 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: 'css-loader'
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'}
+                ]
+            },
+            {
+                test: /\.(|eot|svg|ttf|woff|woff2)$/,
+                use: 'url-loader'
             },
             {
                 test: /\.vue$/,
                 use: 'vue-loader'
             },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 10000,
+                        hash: 'sha512',
+                         //publicPath: '/',
+                        name: 'assets/images/[hash].[ext]'
+                    }
+                }
+            },
             //用babel解析js文件 排除模块安装目录的文件
             {
+                // .babelrc 解决vue-loader解析es6中...失败问题
                 test: /\.js$/,
-                use: 'babel-loader',
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['es2015', 'stage-2']
+                    }
+                }],
                 exclude: /node_modules/
             }
         ]
@@ -41,5 +66,5 @@ module.exports = {
             // https://www.imooc.com/article/17868
             'vue': 'vue/dist/vue.js'
         }
-    }
+    },
 };

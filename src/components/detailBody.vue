@@ -2,13 +2,13 @@
     <div class="body-content">
         <h4> {{ headInfo }} </h4>
         <img :src="memberImg" alt="">
+        <el-button @click="show" icon="el-icon-document" class="el-btn"></el-button>
         <div class="info-content">
             <ul>
                 <li v-for="item in lists">{{ item }}</li>
             </ul>
             <p v-for="item in experience">{{ item }}</p>
             <img :src="teamImg" alt="">
-            <button @click="show">show the table</button>
         </div>
     </div>
 </template>
@@ -18,12 +18,14 @@
         props:["headInfo", "memberImg", "lists", "experienceDes", "teamImg"],
         computed: {
             experience: function () {
-                var ret = [];
-                var split0 = this.experienceDes.split(':');
-                ret.push(split0[0] + ':');
-                var split1 = split0[1].split(';');
-                ret = ret.concat(split1);
-                return ret;
+                if (this.experienceDes) {
+                    var ret = [];
+                    var split0 = this.experienceDes.split(':');
+                    ret.push(split0[0] + ':');
+                    var split1 = split0[1].split(';');
+                    ret = ret.concat(split1);
+                    return ret;
+                }
             }
         },
         methods: {
@@ -36,6 +38,7 @@
 
 <style lang="css" scoped>
     .body-content {
+        position: relative;
         width: 1000px;
         display: block;
         /*height: 480px;*/
@@ -70,10 +73,14 @@
         text-align: left;
         margin-left: 40px;
     }
-    .info-content button {
-        position: relative;
-        bottom: 75px;
-        left: 60px;
-        cursor: pointer;
+    .info-content img {
+        position: absolute;
+        top: 310px;
+        left: 675px;
+    }
+    .el-btn {
+        position: absolute;
+        top: 72px;
+        left: 251px;
     }
 </style>
