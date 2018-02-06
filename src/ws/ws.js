@@ -40,6 +40,13 @@ function processWeibo(weiboInfo) {
         reposts: [],
         creates: []
     };
+    let summary = {
+        post: [],
+        attitude: [],
+        repost: [],
+        comment: []
+    };
+    summary['months'] = months;
     let attitudes = {};
     let comments = {};
     let reposts = {};
@@ -52,6 +59,7 @@ function processWeibo(weiboInfo) {
         comments[month] = [];
         reposts[month] = [];
         creates[month] = [];
+        summary.post.push(monthInfo.length);
         for (let tempInfo of monthInfo) {
             attitudeCount = tempInfo.attitudes_count;
             commentCount = tempInfo.comments_count;
@@ -88,7 +96,13 @@ function processWeibo(weiboInfo) {
     // 努力、人气、自恋、喜爱、潜力
     let radar = [strive, popular, narcissism, like, potential];
 
-    return {trends: trends, radar: radar};
+    for (let month of months) {
+        summary.repost.push(Math.round(reposts[String(month)].reduce(sum) / reposts[String(month)].length));
+        summary.attitude.push(Math.round(attitudes[String(month)].reduce(sum) / attitudes[String(month)].length));
+        summary.comment.push(Math.round(comments[String(month)].reduce(sum) / comments[String(month)].length));
+    }
+
+    return {trends: trends, radar: radar, summary: summary};
 }
 
 function quickSort(arr, left, right) {

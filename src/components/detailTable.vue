@@ -11,10 +11,23 @@
             <div class="table-content" ref="tableDom1"></div>
             <div class="table-content" ref="tableDom2"></div>
             <div class="info-content">
-                <p>目前粉丝数：</p>
-                <p>目前微博等级：</p>
-                <p>最热微博：<button>123</button></p>
-                <p>最水微博：</p>
+                <el-card class="box-card">
+                    <div class="loading">
+                        <i class="el-icon-loading"></i>
+                    </div>
+                    <div class="text item">
+                        目前微博等级：{{weiboDetail.grade}}
+                    </div>
+                    <div class="text item">
+                        目前粉丝数：
+                    </div>
+                    <div class="text item">
+                        最热微博：
+                    </div>
+                    <div class="text item">
+                        最水微博：
+                    </div>
+                </el-card>
             </div>
         </div>
     </transition>
@@ -34,7 +47,8 @@
                     comments: true,
                     reposts: false,
                     attitudes: false
-                }
+                },
+                weiboDetail: {}
             };
         },
         props:["display", "chartsData"],
@@ -71,6 +85,11 @@
                 this.btnDisplay = true;
                 this.charts.trend.setOption(trendOption);
 
+                let summaryData = {chartData: val.summary};
+                let summaryOption = chartExp.getSummaryOption(summaryData);
+                this.charts.summary.hideLoading();
+                this.charts.summary.setOption(summaryOption);
+
                 let radarData = {chartData: val.radar};
                 let radarOption = chartExp.getRadarOption(radarData);
                 this.charts.radar.hideLoading();
@@ -83,23 +102,11 @@
             let chart1 = echarts.init(this.$refs.tableDom1);
             let chart2 = echarts.init(this.$refs.tableDom2);
             this.charts['trend'] = chart0;
+            this.charts['summary'] = chart1;
             this.charts['radar'] = chart2;
             chart0.showLoading();
+            chart1.showLoading();
             chart2.showLoading();
-            let option = {
-                xAxis: {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-                },
-                yAxis: {
-                    type: 'value'
-                },
-                series: [{
-                    data: [820, 932, 901, 934, 1290, 1330, 1320],
-                    type: 'line'
-                }]
-            };
-            chart1.setOption(option);
         }
     }
 </script>
@@ -130,6 +137,9 @@
         height: 280px;
         background-color: white;
         float: left;
+    }
+    .info-content {
+        position: relative;
     }
     .info-content p {
         font-family: "Microsoft YaHei";
@@ -168,5 +178,23 @@
     }
     .btn-active {
         background: #E0FFFF;
+    }
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        padding: 18px 0;
+    }
+    .box-card {
+        text-align: left;
+        font-family: "PingFang SC";
+        width: 420px;
+    }
+    .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
     }
 </style>
