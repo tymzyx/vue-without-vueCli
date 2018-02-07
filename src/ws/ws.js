@@ -17,7 +17,7 @@ wsExp.ws.onmessage = function (ev) {
         store.commit('updateData', data['info']);
     } else if (data.type === 'weibo') {
         // do something
-        let processData = processWeibo(data.weiboInfo);
+        let processData = processWeibo(data);
         console.log('processWeibo: ', processData);
         store.commit('updateChartsData', processData);
         console.log(store.state.chartsData);
@@ -25,7 +25,9 @@ wsExp.ws.onmessage = function (ev) {
 
 };
 
-function processWeibo(weiboInfo) {
+function processWeibo(info) {
+    let weiboInfo = info.weiboInfo;
+    let baseInfo = info.baseInfo;
     let months = Object.keys(weiboInfo);
     months = months.map(value => parseInt(value));
     quickSort(months, 0, 2);
@@ -38,7 +40,8 @@ function processWeibo(weiboInfo) {
         attitudes: [],
         comments: [],
         reposts: [],
-        creates: []
+        creates: [],
+        addresses: []
     };
     let summary = {
         post: [],
@@ -51,7 +54,8 @@ function processWeibo(weiboInfo) {
     let comments = {};
     let reposts = {};
     let creates = {};
-    let attitudeCount, commentCount, repostCount, createTime;
+    let addresses = {};
+    let attitudeCount, commentCount, repostCount, createTime, address;
     for (let month in weiboInfo) {
         let monthInfo = weiboInfo[month];
         monthInfo.reverse();
@@ -59,16 +63,19 @@ function processWeibo(weiboInfo) {
         comments[month] = [];
         reposts[month] = [];
         creates[month] = [];
+        addresses[month] = [];
         summary.post.push(monthInfo.length);
         for (let tempInfo of monthInfo) {
             attitudeCount = tempInfo.attitudes_count;
             commentCount = tempInfo.comments_count;
             repostCount = tempInfo.reposts_count;
             createTime = tempInfo.create_time;
+            address = tempInfo.address;
             attitudes[month].push(attitudeCount);
             comments[month].push(commentCount);
             reposts[month].push(repostCount);
             creates[month].push(createTime);
+            addresses[month].push(address);
         }
     }
     for (let month of months) {
@@ -76,6 +83,7 @@ function processWeibo(weiboInfo) {
         trends.comments = [...trends.comments, ...comments[String(month)]];
         trends.reposts = [...trends.reposts, ...reposts[String(month)]];
         trends.creates = [...trends.creates, ...creates[String(month)]];
+        trends.addresses = [...trends.addresses, ...addresses[String(month)]];
     }
 
     function sum(t, value) {
@@ -102,7 +110,17 @@ function processWeibo(weiboInfo) {
         summary.comment.push(Math.round(comments[String(month)].reduce(sum) / comments[String(month)].length));
     }
 
-    return {trends: trends, radar: radar, summary: summary};
+    let weiboDetail = {};
+    weiboDetail.nickname = baseInfo.nickname;
+    weiboDetail.follower = baseInfo.follower;
+    let mostPopular = Math.max(...trends.comments);
+    let mostWater = Math.min(...trends.comments);
+    weiboDetail.popular = trends.creates[trends.comments.indexOf(mostPopular)];
+    weiboDetail.water = trends.creates[trends.comments.indexOf(mostWater)];
+    weiboDetail.popularAds = trends.addresses[trends.comments.indexOf(mostPopular)];
+    weiboDetail.waterAds = trends.addresses[trends.comments.indexOf(mostWater)];
+
+    return {trends: trends, radar: radar, summary: summary, weiboDetail: weiboDetail};
 }
 
 function quickSort(arr, left, right) {
