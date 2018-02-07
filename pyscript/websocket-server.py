@@ -22,11 +22,11 @@ class DetailHandler(tornado.websocket.WebSocketHandler):
         self.detail_data = {}
         self.weibo_ids = {}
         self.weibo_infos = {}
-        teams = ['B', 'E', 'J']
+        teams = {'B': 'Team B', 'E': 'Team E', 'J': 'Team J'}
         for team in teams:
             with open('detail-json/' + team + '.json', 'r') as f:
                 res = json.load(f)
-                self.detail_data[team] = res
+                self.detail_data[teams[team]] = res
         with open('detail-json/weibo_id.json', 'r') as f:
             res = json.load(f)
             self.weibo_ids = res
@@ -40,7 +40,8 @@ class DetailHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         print 'WebSocket connection build'
-        res = self.detail_data['J']
+        # res = self.detail_data['Team J']
+        res = self.detail_data
         self.write_message({'info': res, 'type': 'detail'})
 
     def on_message(self, message):

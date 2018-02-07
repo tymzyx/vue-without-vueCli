@@ -16,7 +16,7 @@ const routes = [
     },
     {
         mode: 'history',
-        path: '/detail/:detailId',
+        path: '/detail/:teamId/:detailId',
         component: detail,
         name: 'detail',
         props: true

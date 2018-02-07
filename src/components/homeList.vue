@@ -1,7 +1,7 @@
 <template>
     <li class="member-list">
         <div class="member-list-pic" :data-id="dataId">
-            <router-link :to="{name: 'detail', params: {detailId: dataId}}" class="member-list-link">
+            <router-link :to="{name: 'detail', params: {detailId: dataId, teamId: teamId}}" class="member-list-link">
                 <img alt="" :src="memberImg" :data-id="dataId" @click="clicked">
             </router-link>
             <h3>{{memberName}}</h3>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        props: ["memberImg", "memberName", "dataId"],
+        props: ["memberImg", "memberName", "dataId", "teamId"],
         methods: {
             clicked: function (ev) {
                 this.$emit("click", ev.target.getAttribute('data-id'));
