@@ -11,23 +11,28 @@
             <div class="table-content" ref="tableDom1"></div>
             <div class="table-content" ref="tableDom2"></div>
             <div class="info-content">
-                <el-card class="box-card">
-                    <div class="loading">
-                        <i class="el-icon-loading"></i>
+                <div v-if="!infoDisplay" class="loading">
+                    <i class="el-icon-loading"></i>
+                </div>
+                <transition name="el-zoom-in-center">
+                    <div v-if="infoDisplay">
+                        <img class="weiboImg" :src="imgUrl">
+                        <el-card class="box-card">
+                            <div class="text item">
+                                微博昵称：{{weiboDetail.nickname}}
+                            </div>
+                            <div class="text item">
+                                目前粉丝数：{{weiboDetail.follower}}
+                            </div>
+                            <div class="text item">
+                                最热微博：<a :href="weiboDetail.popularAds" target="_blank">{{weiboDetail.popular}}</a>
+                            </div>
+                            <div class="text item">
+                                最水微博：<a :href="weiboDetail.waterAds" target="_blank">{{weiboDetail.water}}</a>
+                            </div>
+                        </el-card>
                     </div>
-                    <div class="text item">
-                        目前微博等级：{{weiboDetail.grade}}
-                    </div>
-                    <div class="text item">
-                        目前粉丝数：
-                    </div>
-                    <div class="text item">
-                        最热微博：
-                    </div>
-                    <div class="text item">
-                        最水微博：
-                    </div>
-                </el-card>
+                </transition>
             </div>
         </div>
     </transition>
@@ -37,18 +42,22 @@
     import echarts from 'echarts'
     import chartExp from '../chart/charts'
 
+    let imgUrl = require('../assets/img/weibo.png');
+
     export default {
         data() {
             return {
                 focus: true,
                 btnDisplay: false,
+                infoDisplay: false,
                 charts: {},
                 btnActives: {
                     comments: true,
                     reposts: false,
                     attitudes: false
                 },
-                weiboDetail: {}
+                weiboDetail: {},
+                imgUrl: imgUrl
             };
         },
         props:["display", "chartsData"],
@@ -94,6 +103,9 @@
                 let radarOption = chartExp.getRadarOption(radarData);
                 this.charts.radar.hideLoading();
                 this.charts.radar.setOption(radarOption);
+
+                this.weiboDetail = Object.assign({}, this.weiboDetail, val.weiboDetail);
+                this.infoDisplay = true;
             }
         },
         mounted: function() {
@@ -122,7 +134,7 @@
         border-radius: 15px;
         box-shadow: 0px 0px 5px black;
         background-color: white;
-        opacity: 0.9;
+        opacity: 0.98;
         text-align: center;
     }
     .table-close {
@@ -145,6 +157,9 @@
         font-family: "Microsoft YaHei";
         margin: 30px 0 0 5px;
         text-align: left;
+    }
+    .info-content a {
+        text-decoration: none;
     }
     .fade-enter-active, .fade-leave-active {
       transition: opacity .5s;
@@ -182,9 +197,9 @@
     .text {
         font-size: 14px;
     }
-
     .item {
         padding: 18px 0;
+        margin-left: 26px;
     }
     .box-card {
         text-align: left;
@@ -196,5 +211,13 @@
         top: 50%;
         left: 50%;
         transform: translateY(-50%) translateX(-50%);
+    }
+    .weiboImg {
+        width: 144px;
+        height: 127px;
+        position: absolute;
+        left: 240px;
+        top: 60px;
+        z-index: 10;
     }
 </style>

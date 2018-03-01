@@ -31,7 +31,7 @@
                 show: false
             }
         },
-        props: ["detailId"],
+        props: ["detailId", "teamId"],
         store,
         components: {
             detailHeader, detailBody, detailFooter, detailTable
@@ -39,9 +39,10 @@
         computed: {
             // ...mapState({items: 'detailData'})
             infos: function () {
-                if (this.$store.state.detailData.length) {
+                if (JSON.stringify(this.$store.state.detailData) !== "{}") {
                     let nowId = this.detailId;
-                    let ret = this.$store.state.detailData.filter(function(ele) {return ele.key == nowId;})[0];
+                    let teamId = this.teamId;
+                    let ret = this.$store.state.detailData[teamId].filter(function(ele) {return ele.key == nowId;})[0];
                     this.srcTeamImg = imgUrls[ret.srcTeamImg];
                     console.log('detailData:', this.detailId, this.$store.state.detailData, ret);
                     return ret;

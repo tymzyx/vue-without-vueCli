@@ -1,9 +1,13 @@
 <template>
-    <div class="container">
-        <ul>
-            <home-list v-for="item in items" :memberImg="item.srcImg" :member-name="item.name.split('|')[0]" :dataId="item.key" :key="item.key" @click="clicked"></home-list>
-        </ul>
-    </div>
+    <el-tabs tab-position="top" style="height: 200px;">
+        <el-tab-pane v-for="(tempItems, key) in items" :label="key">
+            <div class="container">
+                <ul>
+                    <home-list v-for="item in tempItems" :memberImg="item.srcImg" :member-name="item.name.split('|')[0]" :dataId="item.key" :teamId="key" :key="item.key" @click="clicked"></home-list>
+                </ul>
+            </div>
+        </el-tab-pane>
+    </el-tabs>
 </template>
 
 <script>
