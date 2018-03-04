@@ -84,5 +84,5 @@ if __name__ == '__main__':
     ws_app = Application()
     server = tornado.httpserver.HTTPServer(ws_app)
     server.listen(options.port)
-    print 'WebSocket server is open on port', options.port
+    print "WebSocket server is open on port", options.port
     tornado.ioloop.IOLoop.instance().start()
